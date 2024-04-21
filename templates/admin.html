@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}?v=1.1">
+    <title>Potvrdenie registracii</title>
+</head>
+<body>
+    <form action="/logout" method="post">
+        <button type="submit" class="logout">Odhlásiť</button>
+    </form>
+    
+    <h1>Potvrdenie registrácií</h1>
+    
+    <form action="/choose_schedule" method="get">
+        <button type="submit">Zobraziť rozvrhy</button>
+    </form>
+
+    <form action="/generate_schedule" method="post">
+        <button type="submit">Vygenerovať rozvrh</button>
+    </form>
+    <br>
+
+    <div class="table-container">
+        <table border="1">
+            <thead>
+                <tr>
+                    <!-- <th>ID</th> -->
+                    <th> Meno </th>
+                    <th> Priezvisko </th>
+                    <th> Email </th>
+                    <!-- <th>Password</th> -->
+                    <th> Hodiny (max) </th>
+                    <th> Hodiny (min) </th>
+                    <th> Pozícia </th>
+                    <th> Certifikácia </th>
+                    <th> Adresa </th>
+                    <th> Tel.č. </th>
+                    <th> Narodenie </th>
+                    <th> Pracovisko </th>
+                    <th> Nočná služba </th>
+                    <th> Status </th>
+                    <th> Potvrdenie </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for employee in employees %}
+                    <tr>
+                        <!-- <td>{{ employee[0] }}</td> -->
+                        <td>{{ employee[1] }}</td>
+                        <td>{{ employee[2] }}</td>
+                        <td>{{ employee[3] }}</td>
+                        <!-- <td>{{ employee[4] }}</td> -->
+                        <td>{{ employee[5] }}</td>
+                        <td>{{ employee[6] }}</td>
+                        <td>{{ employee[7] }}</td>
+                        <td>{{ employee[8] }}</td>
+                        <td>{{ employee[9] }}</td>
+                        <td>{{ employee[10] }}</td>
+                        <td>{{ employee[11] }}</td>
+                        <td>{{ employee[12] }}</td>
+                        <td>{{ employee[13] }}</td>
+                        <td>
+                            {% if employee[-1] == 'čakajúci' %}
+                                <form action="{{ url_for('change_status', user_id=employee[0]) }}" method="post">
+                                    <select name="status">
+                                        <option value="prijatý">Prijať</option>
+                                        <option value="zamietnuty">Zamietnuť</option>
+                                        <option value="neaktívny">Neaktívny</option>
+                                    </select>
+                                    <input type="submit" value="Potvrdiť">
+                                </form>
+                            {% else %}
+                                    <form action="{{ url_for('change_status', user_id=employee[0]) }}" method="post">
+                                        <select name="status">
+                                            <option value="prijatý">Prijať</option>
+                                            <option value="zamietnuty">Zamietnuť</option>
+                                            <option value="neaktívny">Neaktívny</option>
+                                        </select>
+                                        <input type="submit" value="Zmeniť">
+                                    </form>
+                            {% endif %}
+                        </td>
+                        <td>{{ employee[-1] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+<footer>Univerzitná nemocnica Martin, Kollárova 2, 036 59 Martin</footer>
+</html>

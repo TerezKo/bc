@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}?v=1.1">
+    <title>Neurochirurgicka klinika Martin </title>
+</head>
+<body>
+    <h1>Neurochirurgická klinika v Martine</h1>
+    <h2>Prihlásiť sa:</h2>
+    <form method="post" name="login_form">
+        <label for="username">E-mail:</label>
+        <input type="text" name="username" required>
+        <br>
+        <label for="password">Heslo:</label>
+        <input type="password" name="password" required>
+        <br>
+        <input type="submit" value="Prihlásiť">
+    </form>
+
+    <!-- Odkaz na stránku registrácie -->
+    <p>Ešte nemáte účet? <a href="{{ url_for('register') }}">Zaregistrujte sa</a></p>
+</body>
+
+<footer>Univerzitná nemocnica Martin, Kollárova 2, 036 59 Martin</footer>
+</html>

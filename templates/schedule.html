@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}?v=1.1">
+    <form action="/logout" method="post">
+        <button type="submit" class="logout">Odhlásiť</button>
+    </form>
+    <title>Neurochirurgická klinika Martin</title>
+    <style>
+        @media print {
+            h1 { display: none; } /* Skryje nadpis počas tlače */
+            button { display: none; }
+            table {
+                width: 100%; /* Nastavíme šírku tabuľky na automatickú */
+                font-size: 10px; /* Zmeníme veľkosť písma v tabuľke */
+                line-height: 0.8;
+            }
+        }
+    </style>
+    <script>
+        function printDocument() {
+            window.print();
+        }
+
+        function enableEdit() {
+            var table = document.getElementById("Shifts");
+            var rows = table.getElementsByTagName("tr");
+
+            // Preskočíme prvý riadok, ktorý obsahuje hlavičku
+            for (var i = 1; i < rows.length; i++) {
+                var cols = rows[i].getElementsByTagName("td");
+
+                // Preskočíme prvú bunku v každom riadku, ktorá obsahuje dátum
+                for (var j = 1; j < cols.length; j++) {
+                    var cell = cols[j];
+                    // Kontrola, či už je bunka editovateľná
+                    if (!cell.querySelector("input")) {
+                        var input = document.createElement("input");
+                        input.value = cell.innerText;
+                        cell.innerText = '';
+                        cell.appendChild(input);
+                    }
+                }
+            }
+        }
+
+        function saveChanges() {
+            var table = document.getElementById("Shifts");
+            var rows = table.getElementsByTagName("tr");
+
+            var editedData = [];
+
+            // Prechádzame cez riadky tabuľky
+            for (var i = 1; i < rows.length; i++) {
+                var cols = rows[i].getElementsByTagName("td");
+                var rowData = [];
+
+                // Získame dátum z prvej bunky
+                var dateCell = rows[i].getElementsByTagName("td")[0];
+                var date = dateCell.innerText;
+                rowData.push(date); // Pridáme dátum do row data
+
+                // Prechádzame bunkami, začíname od druhej
+                for (var j = 1; j < cols.length; j++) {
+                    var input = cols[j].querySelector("input");
+                    var value = input.value;
+                    rowData.push(value);
+                    cols[j].innerText = value; // Aktualizujeme text bunky
+                }
+                editedData.push(rowData);
+            }
+
+            // Convert the modified data back into an HTML string
+            var htmlString = "<table id='Shifts' border='1' cellpadding='5'><th>Dátum</th><th>Denná služba</th><th>Nočná služba</th></tr>";
+            for (var i = 0; i < editedData.length; i++) {
+                htmlString += "<tr>";
+                for (var j = 0; j < editedData[i].length; j++) {
+                    htmlString += "<td>" + editedData[i][j] + "</td>";
+                }
+                htmlString += "</tr>";
+            }
+            htmlString += "</table>";
+
+            var position = "{{ position }}";
+            var month_year = "{{ month_year }}";
+            fetch('/save_changes', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ html: htmlString, position: position, month_year: month_year }), // Send the HTML string and position as JSON data
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Server response:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Neurochirurgická klinika v Martine</h1>
+    <p>{{ vypis | safe }} <br>
+    {% if generate != 'generate' %}
+        <button class="tlacit" onclick="printDocument()">Vytlačiť dokument</button></p><br>
+    {% endif %}
+
+    {% if session.get('user_id') == 1 %}
+        {% if history != 'history' %}
+            {% if generate != 'generate' %}
+                <button onclick="enableEdit()">Upraviť</button>
+                <button onclick="saveChanges()">Uložiť zmeny</button><br>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+    
+</body>
+<footer>Univerzitná nemocnica Martin, Kollárova 2, 036 59 Martin</footer>
+</html>
