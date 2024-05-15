@@ -1,0 +1,236 @@
+h1 {
+    color: #333;
+    font-size: 36px;
+    text-align: center;
+    margin-top: 50px;
+}
+
+h2 {
+    color: rgb(19, 58, 55);
+    font-size: 25px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 40px; 
+}
+
+body {
+    background-color: #a1e4e0;
+    font-family: Arial, sans-serif;
+}
+
+
+form[name="login_form"] {
+    margin: 0 auto;
+    max-width: 400px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    text-align: center;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+p {
+    text-align: center;
+    margin-top: 10px;
+    padding-bottom: 50px;
+}
+
+footer {
+    text-align: center;
+    margin-top: 50px;
+    padding-bottom: 50px;
+}
+
+table {
+    border-collapse: collapse;
+    width: 90%;
+    margin: auto;
+    border-radius: 10px;
+}
+
+th, td {
+    border: 1.5px solid rgb(38, 77, 74);
+    padding: 6px;
+    text-align: center;
+}
+
+th {
+    background-color: rgb(43, 88, 85);
+    color: #fff;
+}
+
+td {
+    cursor: pointer;
+    background-color: #fff;
+}
+
+.table-container {
+    overflow-x: auto;
+    max-width: 100%;
+}
+
+.table-container th,
+.table-container td {
+    padding: 2px;
+}
+
+.selected-prefer {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.selected-nonprefer {
+    background-color: #e74c3c;
+    color: white;
+}
+
+div.label {
+    padding: 5px;
+    margin-bottom: 5px;
+}
+
+div.label label {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="password"],
+input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    font-size: 16px; 
+}
+
+.button-container-edit-save {
+    text-align: center;
+    margin-top: 10px;
+}
+
+button.edit,
+button.save {
+    width: 37.5%;
+    margin: auto;
+    bottom: 10px;
+    left: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+input[type="submit"] {
+    width: 100%;
+    background-color: rgb(19, 58, 55);
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: #555;
+}
+
+button[type="submit"] {
+    width: 100%;
+    background-color: rgb(19, 58, 55);
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-size: 15px;
+}
+
+button[type="submit"]:hover {
+    background-color: #555;
+}
+
+button[type="submit"].nepreferencie {
+    width: 35%;
+    bottom: 20px;
+    left: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+button[type="submit"].logout {
+    float: right;
+    width: 10%;
+    bottom: 10px;
+    right: 5px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+button.tlacit {
+    display: block;
+    width: 65%;
+    background-color: rgb(19, 58, 55);
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 15px;
+    margin: 0 auto;
+}
+
+.registration-form {
+    margin: 0 auto;
+    width: 60%;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.form-section {
+    margin-bottom: 20px;
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+select[name="status"] {
+    width: 100%;
+    padding: 2px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+.schedule-links {
+    width: 65%;
+    margin: 0 auto;
+    text-align: center;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+

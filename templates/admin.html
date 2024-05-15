@@ -1,0 +1,188 @@
+<!-- Stranka admina najma na schvalovanie uzivatelov a generovanie rozvrhov -->
+
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}?v=1.1">
+    <title>Potvrdenie registrácií</title>
+</head>
+<body>
+    <form action="/logout" method="post">
+        <button type="submit" class="logout">Odhlásiť</button>
+    </form>
+    
+    <h1>Potvrdenie registrácií</h1>
+    
+    <form action="/choose_schedule" method="get">
+        <button type="submit">Zobraziť rozvrhy</button>
+    </form>
+
+    <form action="/generate_schedule" method="post">
+        <button type="submit">Vygenerovať rozvrh</button>
+    </form>
+    <br>
+
+    <div class="table-container">
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Meno</th>
+                    <th>Priezvisko</th>
+                    <th>Email</th>
+                    <th>Hodiny (max)</th>
+                    <th>Hodiny (min)</th>
+                    <th>Pozícia</th>
+                    <th>Certifikácia</th>
+                    <th>Adresa</th>
+                    <th>Tel.č.</th>
+                    <th>Narodenie</th>
+                    <th>Pracovisko</th>
+                    <th>Nočná služba</th>
+                    <th>Status</th>
+                    <th>Potvrdenie</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for employee in employees %}
+                    <tr>
+                        <td>{{ employee[1] }}</td>
+                        <td>{{ employee[2] }}</td>
+                        <td>{{ employee[3] }}</td>
+                        <td>{{ employee[5] }}</td>
+                        <td>{{ employee[6] }}</td>
+                        <td>{{ employee[7] }}</td>
+                        <td>{{ employee[8] }}</td>
+                        <td>{{ employee[9] }}</td>
+                        <td>{{ employee[10] }}</td>
+                        <td>{{ employee[11] }}</td>
+                        <td>{{ employee[12] }}</td>
+                        <td>{{ employee[13] }}</td>
+                        <td>
+                            {% if employee[-1] == 'čakajúci' %}
+                                <form action="{{ url_for('change_status', user_id=employee[0]) }}" method="post">
+                                    <select name="status">
+                                        <option value="prijatý">Prijať</option>
+                                        <option value="zamietnuty">Zamietnuť</option>
+                                        <option value="neaktívny">Neaktívny</option>
+                                    </select>
+                                    <input type="submit" value="Potvrdiť">
+                                </form>
+                            {% else %}
+                                <form action="{{ url_for('change_status', user_id=employee[0]) }}" method="post">
+                                    <select name="status">
+                                        <option value="prijatý">Prijať</option>
+                                        <option value="zamietnuty">Zamietnuť</option>
+                                        <option value="neaktívny">Neaktívny</option>
+                                    </select>
+                                    <input type="submit" value="Zmeniť">
+                                </form>
+                            {% endif %}
+                        </td>
+                        <td>{{ employee[-1] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <br>
+
+    <div class="table-container">
+        <table border="1" id="Doctors">
+            <thead>
+                <tr>
+                    <th>Pracovisko</th>
+                    <th>Pondelok</th>
+                    <th>Utorok</th>
+                    <th>Streda</th>
+                    <th>Štvrtok</th>
+                    <th>Piatok</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for doctor in doctors %}
+                    <tr>
+                        <td>{{ doctor[1] }}</td>
+                        <td>{{ doctor[2] }}</td>
+                        <td>{{ doctor[3] }}</td>
+                        <td>{{ doctor[4] }}</td>
+                        <td>{{ doctor[5] }}</td>
+                        <td>{{ doctor[6] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+    </div>
+
+    <div class="button-container-edit-save">
+        <button class="edit" onclick="enableDoctorEdit()">Upraviť</button>
+        <button class="save" onclick="saveDoctorChanges()">Uložiť zmeny</button><br>
+    </div>
+
+    <script>
+        function enableDoctorEdit() {
+            var table = document.getElementById("Doctors");
+            var rows = table.getElementsByTagName("tr");
+
+            // Preskočíme prvý riadok, ktorý obsahuje hlavičku
+            for (var i = 1; i < rows.length; i++) {
+                var cols = rows[i].getElementsByTagName("td");
+
+                // Prechádzame bunkami, začíname od druhej
+                for (var j = 1; j < cols.length; j++) {
+                    var cell = cols[j];
+                    // Kontrola, či už je bunka editovateľná
+                    if (!cell.querySelector("input")) {
+                        var input = document.createElement("input");
+                        input.value = cell.innerText;
+                        cell.innerText = '';
+                        cell.appendChild(input);
+                    }
+                }
+            }
+        }
+
+        function saveDoctorChanges() {
+            var table = document.getElementById("Doctors");
+            var rows = table.getElementsByTagName("tr");
+
+            var editedData = [];
+
+            // Prechádzame cez riadky tabuľky
+            for (var i = 1; i < rows.length; i++) {
+                var cols = rows[i].getElementsByTagName("td");
+                var rowData = [];
+
+                // Prechádzame bunkami, začíname od druhej
+                for (var j = 1; j < cols.length; j++) {
+                    var input = cols[j].querySelector("input");
+                    var value = input.value;
+                    rowData.push(value);
+                    cols[j].innerText = value; // Aktualizujeme text bunky
+                }
+                editedData.push(rowData);
+            }
+
+            fetch('/save_doctor_changes', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ doctorsData: editedData }), // Odoslanie údajov o lekároch na server
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Server response:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+    </script>    
+    
+</body>
+<footer>Univerzitná nemocnica Martin, Kollárova 2, 036 59 Martin</footer>
+</html>

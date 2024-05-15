@@ -1,0 +1,111 @@
+<!-- Registracny formular -->
+
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrácia</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}?v=1.1">
+</head>
+<body>
+    <div class="container">
+        <h1>Registrácia</h1>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                        <li class="{% if 'error' in message %}error-message{% else %}success-message{% endif %}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        <form class="registration-form" method="post">
+            <div class="form-section">
+                <h4>Prihlasovacie údaje: </h4>
+                <label for="email">E-mail:</label>
+                <input type="email" name="email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"><br>
+
+                <label for="password">Heslo:</label>
+                <input type="password" name="password" id="password" required pattern="(?=.*\d)(?=.*[a-zA-Z]).{6,}" title="Heslo musí obsahovať aspoň 6 znakov, minimálne 1 písmeno a 1 číslo."><br>
+
+                <label for="confirm_password">Potvrdenie hesla:</label>
+                <input type="password" name="confirm_password" id="confirm_password" required oninput="checkPasswordMatch()" title="Heslá sa nezhodujú."><br>
+            </div>
+
+            <div class="form-section">
+                <h4>Osobné údaje: </h4>
+                <label for="first_name">Meno:</label>
+                <input type="text" name="first_name" required pattern="[A-Z][a-zA-Z0-9\s]*" title="Meno musí začínať veľkým písmenom."><br>
+
+                <label for="last_name">Priezvisko:</label>
+                <input type="text" name="last_name" required pattern="[A-Z][a-zA-Z0-9\s]*" title="Priezvisko musí začínať veľkým písmenom."><br>
+
+                <label for="address">Adresa trvalého bydliska:</label>
+                <input type="text" name="address" required><br>
+
+                <label for="mobile">Tel.č.:</label>
+                <input type="tel" name="mobile" required pattern="[0-9+][0-9]*" title="Tel. č. zadajte bez medzier."><br>
+
+                <label for="birth_date">Dátum narodenia:</label>
+                <input type="text" name="birth_date" id="birth_date" required placeholder="DD.MM.RRRR"><br>
+
+                <label for="position">Pozícia:</label>
+                <select name="position" id="position" onchange="checkDoctorPosition()">
+                    {% for value, label in positions %}
+                        <option value="{{ value }}">{{ label }}</option>
+                    {% endfor %}
+                </select><br>
+
+                <label id="certification_label" for="certification" style="display:none;">Certifikácia:</label>
+                <select name="certification" id="certification" style="display:none;">
+                    <option value="Atestovaný">Atestovaný</option>
+                    <option value="Neatestovaný">Neatestovaný</option>
+                </select>
+
+                <label id="workplace_label" for="workplace"> Pracovisko:</label>
+                <select name="workplace" id="workplace">
+                    <option value="Oddelenie">Oddelenie</option>
+                    <option value="JIS">JIS</option>
+                    <option value="Obe">Obe</option>
+                </select><br>
+
+                <label id="workatnight_label" for="workatnight"> Nočné služby:</label>
+                <select name="workatnight" id="workatnight">
+                    <option value="Ano">Áno</option>
+                    <option value="Nie">Nie</option>
+                </select><br>
+
+                <label for="max_hours">Maximálny počet odpracovaných hodín na mesiac:</label>
+                <input type="number" name="max_hours" required min="0"><br>
+
+                <label for="min_hours">Minimálny počet odpracovaných hodín na mesiac:</label>
+                <input type="number" name="min_hours" required min="0"><br>
+
+                <br>
+
+                <input type="submit" value="Zaregistrovať">
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function checkDoctorPosition() {
+            var position = document.getElementById("position").value;
+            var certificationLabel = document.getElementById("certification_label");
+            var certificationSelect = document.getElementById("certification");
+    
+            if (position === "lekar") {
+                certificationLabel.style.display = "block";
+                certificationSelect.style.display = "block";
+            } else {
+                certificationLabel.style.display = "none";
+                certificationSelect.style.display = "none";
+            }
+        }
+    </script>
+    
+</body>
+<footer>Univerzitná nemocnica Martin, Kollárova 2, 036 59 Martin</footer>
+</html>
