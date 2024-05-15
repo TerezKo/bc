@@ -186,9 +186,6 @@ def vypis_rozvrhu(position, employees, max_num_shifts, min_num_shifts, last_mont
         model += sum(schedule[i, :, :]) <= max_num_shifts[i]
 
     # Obmedzenie: minimálny počet hodín na odpracovanie
-    for employee in not_workatnight:
-        emp = employees.index(employee)
-
     for i in range(len(employees)):
         model += (sum(schedule[i, :, 0]) + sum(schedule[i, :, 1])) >= min_num_shifts[i]
 
